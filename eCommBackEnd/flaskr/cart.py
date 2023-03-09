@@ -5,21 +5,21 @@ from flaskr.db import get_db
 
 bp = Blueprint('cart', __name__, url_prefix='/cart')
 
-'''Endpoint to get the user's cart'''
+'''Endpoint to get the user's games stored in the cart'''
 @bp.route('/', methods=['GET'])
-def cart():
-    data = request.get_json()
-    userID = data['userID']
+def games_in_cart():
+    userID = session['userID']
 
     db = get_db()
     error = None
     
     if userID is None:
-        error = 'No user id detected.'
+        error = 'You must be logged in to make this request.'
+        return jsonify({'success': False, 'error': error}), 400
     
     if error is None:
         gamesInCart = db.execute('SELECT * FROM GAMES WHERE gameID IN (SELECT gameID FROM CARTS WHERE userID = ?);', (userID)).fetchall()
-        cartInfo = db.execute('SELECT * FROM CARTS WHERE userID = ?;', (userID)).fetchall()
+        # cartInfo = db.execute('SELECT * FROM CARTS WHERE userID = ?;', (userID)).fetchall()
 
         if len(gamesInCart) <= 0:
             error = 'The cart is empty.'
@@ -33,48 +33,22 @@ def cart():
                 'description': game['description'],
                 'price': game['price'],
                 'image': game['image'],
-                'genre': game['genre']
+                'genre': game['genre'],
+                'developer': game['developer'],
+                'avergeRating' : game['avergeRating']
             }
 
             games_list.append(game_data)
         
+        return jsonify({'success': True, 'games_in_cart': games_list})
 
-    else:
-        return jsonify({'success': False, 'error': error}), 400
-
-
-    data = request.get_json()
-    userID = data['userID']
-
-    db = get_db()
-    error = None
-
-    cart = db.execute('SELECT gamesID FROM GAMES;').fetchall()
-    
-    if len(all_games) <= 0:
-        error = 'There are no games stored in the data base.'
-        return jsonify({'success': False, 'error': error}), 400
-
-    games_list = []
-    for game in all_games:
-        game_data = {
-            'gameID': game['gameID'],
-            'name': game['name'],
-            'description': game['description'],
-            'price': game['price'],
-            'image': game['image'],
-            'genre': game['genre']
-        }
-        games_list.apped(game_data)
-    flash(error)
-    return jsonify({'games': games_list})
 
 '''Endpoint to add a game to the user's cart'''
 @bp.route('/add_game', methods=['POST'])
 def add_game():
     data = request.get_json()
     gameID = data['gameID']
-    userID = data['userID']
+    userID = session['userID']
 
     db = get_db()
     error = None

@@ -79,8 +79,8 @@ INSERT INTO USERS (name, password,email, address) VALUES ('Abel', '1234', 'abel.
 
 INSERT INTO GENRES (name) VALUES ('Horror');
 INSERT INTO GENRES (name) VALUES ('Adventure');
-INSERT INTO GENRES (name) VALUES ('First Person Shooter');
-INSERT INTO GENRES (name) VALUES ('Third Person');
+INSERT INTO GENRES (name) VALUES ('First_Person_Shooter');
+INSERT INTO GENRES (name) VALUES ('Third_Person');
 INSERT INTO GENRES (name) VALUES ('Puzzle');
 
 INSERT INTO GAMES (name, description, developer, price, image, genre, avergeRating) VALUES ('Halo 3', 'The best Game ever made','Bungie', 59.99, 'https://cdn.vox-cdn.com/thumbor/oFM-rZEfJNCTrCPerSLKNk-f08U=/0x0:1857x1106/1820x1213/filters:focal(443x235:739x531):format(webp)/cdn.vox-cdn.com/uploads/chorus_image/image/67025788/halo_3.6.jpg',3, 10);
